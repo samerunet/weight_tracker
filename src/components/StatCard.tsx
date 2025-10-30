@@ -1,31 +1,16 @@
 "use client";
-import React from "react";
-type Variant = "blue" | "magenta" | "violet";
-
-export default function StatCard({
-  label,
-  value,
-  unit,
-  footnote,
-  variant = "blue",
-}: {
-  label: string;
-  value: string;
-  unit?: string;
-  footnote?: string;
-  variant?: Variant;
+type Variant = "blue"|"magenta";
+export default function StatCard({ label, value, unit, variant="blue" }:{
+  label:string; value:string; unit?:string; variant?:Variant;
 }) {
   return (
     <div className={`stat-card ${variant}`}>
       <div className="stat-label">{label}</div>
       <div className="stat-value">
-        {value}
-        {unit ? (
-          <span className="stat-unit">{unit}</span>
-        ) : null}
+        {value}{unit && <span className="text-[13px] text-[var(--sub)] font-extrabold ml-1">{unit}</span>}
       </div>
-      <div className="stat-accent" />
-      {footnote ? <div className="stat-footnote">{footnote}</div> : null}
+      <div className="mt-1 h-[2px] w-10 rounded-full"
+           style={{background:"linear-gradient(90deg, rgba(155,239,255,.85), transparent)"}}/>
     </div>
   );
 }

@@ -1,82 +1,65 @@
 "use client";
-import RingProgress from "@/components/RingProgress";
 import StatCard from "@/components/StatCard";
-import TrendChart from "@/components/TrendChart";
-import { NeonButton, NeonTile, BottomNav } from "@/components/NeonBits";
+import RingProgress from "@/components/RingProgress";
+import { NeonButton, Tile, BottomNav } from "@/components/NeonBits";
+
+function Sparkline(){
+  return (
+    <svg width="100%" viewBox="0 0 340 110" className="mt-2">
+      <g>
+        <line x1="40" y1="12" x2="40" y2="98" className="axis"/>
+        <line x1="40" y1="98" x2="330" y2="98" className="axis"/>
+        {[210,190,160].map((yLabel, i)=>(
+          <g key={i}>
+            <line x1="40" y1={12 + i*28} x2="330" y2={12 + i*28} className="tick"/>
+            <text x="8" y={16 + i*28} fill="var(--sub)" fontSize="12" fontWeight="700">{yLabel}</text>
+          </g>
+        ))}
+      </g>
+      <path d="M40,70 C80,65 120,60 160,75 C200,90 240,88 280,78 300,74 320,72 330,72"
+            className="spark" stroke="rgba(0,240,255,.9)" strokeWidth="2.5"/>
+      <path d="M40,75 C90,92 150,92 210,80 C250,72 290,70 330,66"
+            className="spark" stroke="rgba(255,0,229,.9)" strokeWidth="2.5" strokeDasharray="4 6"/>
+      <text x="48" y="104" fill="var(--sub)" fontSize="13" fontWeight="700">Start</text>
+      <text x="290" y="104" fill="var(--sub)" fontSize="13" fontWeight="700">Goal</text>
+    </svg>
+  );
+}
 
 export default function Page() {
-  const kg = 84.4, cm = 178;
-  const lb = Math.round(kg * 2.20462);
-  const _bmi = Math.round((kg / Math.pow(cm/100,2)) * 10) / 10;
-  const bf = "22,5";
-
   return (
-    <main className="relative min-h-screen max-w-[720px] mx-auto px-3 sm:px-4">
+    <main className="relative min-h-screen max-w-[720px] mx-auto px-3">
       <div className="neon-vignette" />
       <div className="device-frame" />
 
-      <div className="safe-wrap pt-5 pb-24">
-        <header className="status-bar">
-          <span className="status-time">11:11</span>
-          <span className="moon-icon" aria-hidden />
-        </header>
+      <div className="safe-wrap pt-6">
+        <h1 className="text-center text-[32px] font-black title-neon">NEON FIT</h1>
 
-        <h1 className="mt-4 text-center text-[28px] sm:text-[34px] font-black tracking-[0.34em] text-[--baby]
-                       drop-shadow-[0_0_22px_rgba(0,240,255,0.85)]">
-          NEON FIT
-        </h1>
-
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
-          <StatCard
-            label="Weight"
-            value={String(lb)}
-            unit="lb"
-            variant="blue"
-          />
-          <StatCard
-            label="BMI"
-            value={String(_bmi)}
-            variant="magenta"
-          />
-          <StatCard
-            label="Body Fat"
-            value={bf}
-            unit="%"
-            variant="violet"
-          />
+        <div className="grid grid-cols-3 gap-3 mt-3">
+          <StatCard label="Weight"   value="186" unit="lb" variant="blue" />
+          <StatCard label="BMI"      value="25.1"           variant="magenta" />
+          <StatCard label="Body Fat" value="22.5" unit="%"  variant="magenta" />
         </div>
 
-        <div className="mt-7">
-          <RingProgress value={0.67}/>
-          <div className="mt-6">
-            <TrendChart />
-          </div>
-        </div>
+        <div className="mt-6 flex justify-center"><RingProgress value={0.67}/></div>
+        <div className="mt-2">{Sparkline()}</div>
 
-        <div className="grid grid-cols-2 gap-3 mt-6">
-          <NeonButton label="Add Weight" variant="cyan" icon="plus" />
-          <NeonButton label="Log Meal" variant="pink" icon="utensils" />
+        <div className="grid grid-cols-2 gap-3 mt-4">
+          <button className="btn-neon cyan w-full text-[15px] tracking-wide">+ Add Weight</button>
+          <button className="btn-neon pink w-full text-[15px] tracking-wide">Log meal</button>
         </div>
 
         <div className="grid grid-cols-2 gap-3 mt-4">
-          <NeonTile tone="cyan" icon="qr">
-            <div className="tile-heading">Scan Food</div>
-            <div className="tile-body">
-              <div className="tile-number">2850 kcal</div>
-              <div className="tile-caption">Daily Calorie Target</div>
-            </div>
-          </NeonTile>
-          <NeonTile tone="pink" icon="dumbbell">
-            <div className="tile-heading">Full Body</div>
-            <div className="tile-meta">(3×/Week)</div>
-            <div className="tile-caption">Intermediate Workout Plan</div>
-            <div className="tile-mini-ring" />
-          </NeonTile>
-        </div>
-
-        <div className="mt-4 flex gap-2">
-          <button className="pill neon">Targets</button>
-          <button className="pill ghost">Coach</button>
+          <Tile tone="cyan">
+            <div className="text-[15px] font-black">Scan Food</div>
+            <div className="text-[13px] text-[var(--sub)] mt-1">Daily Calorie Target</div>
+            <div className="text-[--baby] text-xl font-black mt-1">2850 kcal</div>
+          </Tile>
+          <Tile tone="pink">
+            <div className="text-[15px] font-black">Full Body (3×/Week)</div>
+            <div className="text-[13px] text-[var(--sub)]">Intermediate Workout Plan</div>
+            <div className="mt-2 w-6 h-6 rounded-full border-[3px] border-[rgba(0,255,166,.9)] border-t-[rgba(0,240,255,.2)]" />
+          </Tile>
         </div>
       </div>
 
